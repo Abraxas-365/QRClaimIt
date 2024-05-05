@@ -27,6 +27,16 @@ pub async fn set_owner(
     Ok(HttpResponse::Ok().finish())
 }
 
+pub async fn get_qr(
+    service: web::Data<Arc<Service>>,
+    path: web::Path<(String,)>,
+) -> Result<HttpResponse, AppError> {
+    let id = &path.into_inner().0;
+    let qr = service.get_qr(id).await?;
+
+    Ok(HttpResponse::Ok().json(QrDto::from(qr)))
+}
+
 #[derive(Deserialize)]
 pub struct QrInfo {
     id: String,
